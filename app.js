@@ -1,4 +1,4 @@
-const scoreDisplay = document.querySelector('.score')
+const scoreDisplay = document.querySelector('#score')
 const grid = document.querySelector('.grid')
 const gridWidth = 560
 const gridHeight = 300
@@ -124,17 +124,23 @@ function collisionCheck(){
         ) {// removes blocks on collision
             const allCubes = Array.from(document.querySelectorAll('.cube'))
             allCubes[i].classList.remove('cube')
-            cubes.splice(i, 1)
+            cubes.splice(i,1)
             changeDirection()
         }
 
     //wall collision handling
-    if (currentBallPosition[0] >= (gridWidth - ballDiameter) || 
-        currentBallPosition[1] >= (gridHeight - ballDiameter) ||
-        currentBallPosition[0] <= 0) {
-        changeDirection()
+    if (currentBallPosition[0] >= (gridWidth - ballDiameter) ||
+        currentBallPosition[0] <= 0 || 
+        currentBallPosition[1] >= (gridHeight - ballDiameter))
+    {
+      changeDirection()
     }
-    
+        //checks for win/gameover
+    if (blocks.length == 0) {
+        scoreDisplay.innerHTML = 'YOU WIN'
+        clearInterval(timerId)
+        document.removeEventListener('keydown', movePlayer)
+    }
 
     }
     //checks for loss/gameover
@@ -148,21 +154,21 @@ function collisionCheck(){
 
 
 //ball changing direction
-function changeDirection(){
-    if(xDirection === 2 && yDirection === 2){
-        yDirection = -2
-        return
+function changeDirection() {
+    if (xDirection === 2 && yDirection === 2) {
+      yDirection = -2
+      return
     }
-    if(xDirection == 2 && yDirection  == -2 ){
-        xDirection = -2
-        return
+    if (xDirection === 2 && yDirection === -2) {
+      xDirection = -2
+      return
     }
-    if(xDirection == -2 && yDirection == -2){
-        yDirection = 2
-        return
+    if (xDirection === -2 && yDirection === -2) {
+      yDirection = 2
+      return
     }
-    if(xDirection == -2 && yDirection === 2){
-        xDirection = 2
-        return
+    if (xDirection === -2 && yDirection === 2) {
+      xDirection = 2
+      return
     }
-}
+  }
