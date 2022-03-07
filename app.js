@@ -1,7 +1,13 @@
+const scoreDisplay = document.querySelector('.score')
 const grid = document.querySelector('.grid')
 const gridWidth = 560
+const gridHeight = 300
 const cubeWidth = 100
 const cubeHeight = 20
+const ballDiameter = 20
+let xDirection = -2
+let yDirection = 2
+let timerId
 //create cube
 
 const playerStartingPosition = [230, 10]
@@ -100,5 +106,63 @@ grid.appendChild(ball)
 //move ball
 
 function moveBall(){
+    currentBallPosition[0] += xDirection
+    currentBallPosition[1] += yDirection
+    drawBall()
+    collisionCheck()
+}
 
+timerId = setInterval(moveBall, 30)
+
+//collision check
+function collisionCheck(){
+    //block collision handling
+    for (let i = 0; i < cubes.length; i++){
+        if ( 
+            (currentBallPosition[0] > cubes[i].bottomLeft[0] && currentBallPosition[0] < cubes[i].bottomRight[0]) &&
+            ((currentBallPosition[1] + ballDiameter) > cubes[i].bottomLeft[1] && currentBallPosition[1] < blocks[i].topLeft[1])
+        ) {// removes blocks on collision
+            const allCubes = Array.from(document.querySelectorAll('.cube'))
+            allCubes[i].classList.remove('cube')
+            cubes.splice(i, 1)
+            changeDirection()
+        }
+
+    //wall collision handling
+    if (currentBallPosition[0] >= (gridWidth - ballDiameter) || 
+        currentBallPosition[1] >= (gridHeight - ballDiameter) ||
+        currentBallPosition[0] <= 0) {
+        changeDirection()
+    }
+    
+
+    }
+    //checks for loss/gameover
+    if(currentBallPosition[1] <= 0){
+        clearInterval(timerId)
+        alert('YOU LOSE')
+        document.removeEventListener('keydown', movePlayer)
+    }
+}
+
+
+
+//ball changing direction
+function changeDirection(){
+    if(xDirection === 2 && yDirection === 2){
+        yDirection = -2
+        return
+    }
+    if(xDirection == 2 && yDirection  == -2 ){
+        xDirection = -2
+        return
+    }
+    if(xDirection == -2 && yDirection == -2){
+        yDirection = 2
+        return
+    }
+    if(xDirection == -2 && yDirection === 2){
+        xDirection = 2
+        return
+    }
 }
