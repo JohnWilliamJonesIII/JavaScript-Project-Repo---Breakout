@@ -1,10 +1,13 @@
 const grid = document.querySelector('.grid')
+const gridWidth = 560
 const cubeWidth = 100
 const cubeHeight = 20
 //create cube
 
 const playerStartingPosition = [230, 10]
+const ballStartingPosition = [270, 50]
 let currentPlayerPosition = playerStartingPosition
+let currentBallPosition = ballStartingPosition
 
 class Cube {
     constructor(xAxis, yAxis) {
@@ -61,13 +64,41 @@ function drawPlayer() {
     player.style.left = currentPlayerPosition[0] + 'px'
     player.style.bottom = currentPlayerPosition[1] + 'px'
 }
+//draw ball
+function drawBall(){
+    ball.style.left = currentBallPosition[0] + 'px'
+    ball.style.bottom = currentBallPosition[1] + 'px'
+}
 
-
-//move user
-function moveUser(e) {
+//moves player
+function movePlayer(e) {
     switch(e.key){
         case'ArrowLeft':
+        if (currentPlayerPosition[0] > 0){
             currentPlayerPosition[0] -= 10
-            player.style.left = currentPlayerPosition[0] + 'px'
+            drawPlayer()
+        }     
+            break;
+        case'ArrowRight':
+        if (currentPlayerPosition[0] < gridWidth - cubeWidth){
+            currentPlayerPosition[0] += 10
+            drawPlayer()
+            }     
+            break;
     }
+}
+
+document.addEventListener('keydown', movePlayer)
+
+
+//adds ball
+const ball = document.createElement('div')
+ball.classList.add('ball')
+drawBall()
+grid.appendChild(ball)
+
+//move ball
+
+function moveBall(){
+
 }
